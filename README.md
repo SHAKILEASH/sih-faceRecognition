@@ -16,7 +16,7 @@ measurements (embedding)** in it. To find the embeddings of a face, we use a
 trained deep convolutional neural network which uses a **Triplet Loss
 function** to encode, where 3 images are taken – two of the same person and one
 of the different. The detected face is then compared with already existing target
-faces where the **best match** is found and recognised.
+faces where the **best match** is found and recognised. Coded in Python!
 ## Requirements
 * OpenCV  (Open source Computer Vision) library for image processing
 * NumPy Package for handling array data 
@@ -61,6 +61,8 @@ The last step is actually the easiest step in the whole process. All we have to 
 This can be done by using any basic machine learning classification algorithm. 
 Here we use a simple linear SVM classifier.
 All we need to do is train a classifier that can take in the measurements from a new detected face and tells which known person is the closest match. Running this classifier takes milliseconds. The result of the classifier is the name of the person!
+## References
+[https://medium.com/@ageitgey/machine-learning-is-fun-part-4-modern-face-recognition-with-deep-learning-c3cffc121d78](https://medium.com/@ageitgey/machine-learning-is-fun-part-4-modern-face-recognition-with-deep-learning-c3cffc121d78)
 ## Contributing
 Pull requests are welcome. For major changes, please open an issue first to discuss what you would like to change.
 
