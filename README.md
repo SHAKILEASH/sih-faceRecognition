@@ -31,11 +31,12 @@ faces where the **best match** is found and recognised.
 * To find faces in an image, we’ll start by making our image black and white.
 * Then we’ll look at every single pixel in our image one at a time. For every single pixel, we want to look at the pixels that directly surrounding it:<br />
 ![HOG](https://miro.medium.com/max/875/1*RZS05e_5XXQdofdRx1GvPA.gif)<br />
-* Our goal is to figure out how dark the current pixel is compared to the pixels directly surrounding it. Then we want to draw an arrow showing in which direction the image is getting darker:![HOG](https://miro.medium.com/max/625/1*WF54tQnH1Hgpoqk-Vtf9Lg.gif)<br/>
+* Our goal is to figure out how dark the current pixel is compared to the pixels directly surrounding it. Then we want to draw an arrow showing in which direction the image is getting darker:<br/>![HOG](https://miro.medium.com/max/625/1*WF54tQnH1Hgpoqk-Vtf9Lg.gif)<br/>
 * If you repeat that process for every single pixel in the image, you end up with every pixel being replaced by an arrow. These arrows are called gradients and they show the flow from light to dark across the entire image:<br/>
 ![HOG](https://miro.medium.com/max/875/1*oTdaElx_M-_z9c_iAwwqcw.gif)<br />
 * The end result is we turn the original image into a very simple representation that captures the basic structure of a face in a simple way:<br />
-![HOG](https://miro.medium.com/max/875/1*uHisafuUw0FOsoZA992Jdg.gif)
+![HOG](https://miro.medium.com/max/875/1*uHisafuUw0FOsoZA992Jdg.gif)<br/>
+* To find faces in this HOG image, all we have to do is find the part of our image that looks the most similar to a known HOG pattern that was extracted from a bunch of other training faces:<br />![HOG](https://miro.medium.com/max/875/1*6xgev0r-qn4oR88FrW6fiA.png)<br/>
 
 ## Face Recognition with Embeddings
 We need to be able to recognize faces in milliseconds, not hours.
@@ -47,11 +48,21 @@ The training process works by looking at 3 face images at a time:
 * 1-Load a training face image of a known person.
 * 2-Load another picture of the same known person.
 * 3-Load a picture of a totally different person
-Then the algorithm looks at the measurements it is currently generating for each of those three images. It then tweaks the neural network slightly so that it makes sure the measurements it generates for #1 and #2 are slightly closer while making sure the measurements for #2 and #3 are slightly further apart.
+Then the algorithm looks at the measurements it is currently generating for each of those three images. It then tweaks the neural network slightly so that it makes sure the measurements it generates for #1 and #2 are slightly closer while making sure the measurements for #2 and #3 are slightly further apart.<br/>
+![HOG](https://miro.medium.com/max/518/1*AbEg31EgkbXSQehuNJBlWg.png)
+![HOG](https://miro.medium.com/max/875/1*xBJ4H2lbCMfzIfMrOm9BEQ.jpeg)
+![HOG](https://miro.medium.com/max/875/1*n1R8VMyDRw3RNO3JULYBpQ.png)<br/>
 * Machine learning people call the 128 measurements of each face an embedding. The idea of reducing complicated raw data like a picture into a list of computer-generated numbers comes up a lot in machine learning
  * OpenFace already trained the model and they published several trained networks which we can directly use.
 So all we need to do ourselves is run our face images through their pre-trained network to get the 128 measurements for each face. 
-All that we care is that the network generates nearly the same numbers when looking at two different pictures of the same person.
+All that we care is that the network generates nearly the same numbers when looking at two different pictures of the same person.<br/>
+![HOG](https://miro.medium.com/max/875/1*6kMMqLt4UBCrN7HtqNHMKw.png)<br/>
+The last step is actually the easiest step in the whole process. All we have to do is find the person in our database of known people who has the closest measurements to the detected face.
+This can be done by using any basic machine learning classification algorithm. 
+Here we use a simple linear SVM classifier.
+All we need to do is train a classifier that can take in the measurements from a new detected face and tells which known person is the closest match. Running this classifier takes milliseconds. The result of the classifier is the name of the person!
+## Contributing
+Pull requests are welcome. For major changes, please open an issue first to discuss what you would like to change.
 
 
 
